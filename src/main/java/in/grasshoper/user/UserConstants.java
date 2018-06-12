@@ -8,9 +8,11 @@ public interface UserConstants {
 	String NameParamName = "name";
 	String EmailParamName ="email";
 	String PasswordParamName = "password";
+	String OldPasswordParamName = "oldPassword";
 	//String ConfirmPasswordParamName = "cnfrmpassword";
 	String PhoneNumberParamName = "phone";
 	String IsPublicUserParamName = "ispublicuser";
+	String ReturnUrlParamName = "returnUrl";
 	
 	//resource
 	String USER_RESOURCE = "user";
@@ -18,6 +20,6 @@ public interface UserConstants {
 	
 	//supported params
 	Set<String>  CreateUserParams = new HashSet<>(
-			Arrays.asList(NameParamName, EmailParamName, PasswordParamName, PhoneNumberParamName, "locale"));
+			Arrays.asList(NameParamName, EmailParamName, PasswordParamName, PhoneNumberParamName, ReturnUrlParamName, "locale"));
 	
 }

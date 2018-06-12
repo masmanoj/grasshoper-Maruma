@@ -15,8 +15,11 @@ angular.module('dashboard.services', []).service('SessionMgr',[ '$rootScope', 'R
                 userPermissions: data.permissions,
                 name: data.name
             }
-            Restangular.setDefaultHeaders({'Authorization': 'Custom '+data.sessionKey});
-            return user;
+            if(data.sessionKey)
+            	Restangular.setDefaultHeaders({'Authorization': 'Custom '+data.sessionKey});
+            else
+            	Restangular.setDefaultHeaders({'Authorization': ''});
+            return {user: user};
         };
     }
     this.clear = function () {

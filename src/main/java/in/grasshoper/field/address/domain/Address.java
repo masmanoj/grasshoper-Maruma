@@ -72,9 +72,12 @@ public class Address extends AbstractPersistable<Long>{
     @JoinColumn(name = "owner_user_id", nullable = true)
 	private User ownerUser;
 	
+	@Column(name = "is_deleted", nullable = false)
+	private Boolean isDeleted;
 	
 	
-	public static Address fromJson(final JsonCommand command){
+	
+	public static Address fromJson(final User user, final JsonCommand command){
 		final String name = command.stringValueOfParameterNamed(NameParamName);
 		final String addressLine1 = command.stringValueOfParameterNamed(AddressLine1ParamName);
 		final String addressLine2 = command.stringValueOfParameterNamed(AddressLine2ParamName);
@@ -88,11 +91,11 @@ public class Address extends AbstractPersistable<Long>{
 		final BigDecimal latitude = command.bigDecimalValueOfParameterNamed(LatitudeParamName);
 		final BigDecimal longitude = command.bigDecimalValueOfParameterNamed(LongitudeParamName);
 		final Integer addressType = command.integerValueOfParameterNamed(AddressTypeParamName);
-		final User ownerUser = null;
-		
+		final User ownerUser = user;
+		final Boolean isDeleted = false;
 		return new Address(name, addressLine1, addressLine2, addressLine3, area, 
 				landmark, city, pin, contactNumber, extraInfo, latitude, 
-				longitude, addressType, ownerUser);
+				longitude, addressType == null ? 0 : addressType, ownerUser, isDeleted);
 	}
 	
 	protected Address() {
@@ -104,7 +107,7 @@ public class Address extends AbstractPersistable<Long>{
 			final String addressLine3, final String area, final String landmark, final String city,
 			final String pin, final String contactNumber, final String extraInfo,
 			final BigDecimal latitude, final BigDecimal longitude, final Integer addressType,
-			final User ownerUser) {
+			final User ownerUser, final Boolean isDeleted) {
 		super();
 		this.name = name;
 		this.addressLine1 = addressLine1;
@@ -120,6 +123,7 @@ public class Address extends AbstractPersistable<Long>{
 		this.longitude = longitude;
 		this.addressType = addressType;
 		this.ownerUser = ownerUser;
+		this.isDeleted = isDeleted;
 	}
 	
 	
@@ -127,4 +131,11 @@ public class Address extends AbstractPersistable<Long>{
 		this.ownerUser = ownerUser;
 	}
 	
+	public User getOwnerUser(){
+		return this.ownerUser;
+	}
+	
+	public void deleteAddress(){
+		this.isDeleted = true;
+	}
 }

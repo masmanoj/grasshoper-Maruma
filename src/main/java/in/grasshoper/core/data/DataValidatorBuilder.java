@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.util.ObjectUtils;
 
@@ -126,7 +129,6 @@ public class DataValidatorBuilder {
         return this;
     }
 
-    /*** FIXME: Vishwas, why does this method have a parameter? Seems wrong ***/
     public DataValidatorBuilder trueOrFalseRequired(final boolean trueOfFalseFieldProvided) {
         if (!trueOfFalseFieldProvided && !this.ignoreNullValue) {
             final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
@@ -740,7 +742,7 @@ public class DataValidatorBuilder {
          * the beginning and can contain whitespaces in between and length
          * allowed is 0-25 chars.
          */
-        final String regex = "^\\+?[0-9. ()-]{0,25}$";
+        final String regex = "^[0-9]{10,12}$";
         final Pattern pattern = Pattern.compile(regex);
         final Matcher matcher = pattern.matcher(this.value.toString());
         if (matcher.matches()) {
@@ -749,8 +751,8 @@ public class DataValidatorBuilder {
         if (validationErr) {
             final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
                     .append(this.parameter).append(".format.is.invalid");
-            final StringBuilder defaultEnglishMessage = new StringBuilder("The ").append(this.resource).append(this.parameter)
-                    .append(" is in invalid format, should contain '-','+','()' and numbers only.");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The ").append(this.resource+" ").append(this.parameter)
+                    .append(" is in invalid format, should contain numbers only, length 10-12");
             final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
                     defaultEnglishMessage.toString(), this.parameter, this.value);
             this.dataValidationErrors.add(error);
@@ -758,6 +760,31 @@ public class DataValidatorBuilder {
         return this;
     }
 
+    public DataValidatorBuilder validatePinNumber() {
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        boolean validationErr = true;
+        /*
+         * supports numbers, parentheses(), hyphens and may contain + sign in
+         * the beginning and can contain whitespaces in between and length
+         * allowed is 0-25 chars.
+         */
+        final String regex = "^[0-9]{6}$";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(this.value.toString());
+        if (matcher.matches()) {
+            validationErr = false;
+        }
+        if (validationErr) {
+            final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                    .append(this.parameter).append(".format.is.invalid");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The ").append(this.resource+" ").append(this.parameter)
+                    .append(" is in invalid format, should contain numbers only, length 6");
+            final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                    defaultEnglishMessage.toString(), this.parameter, this.value);
+            this.dataValidationErrors.add(error);
+        }
+        return this;
+    }
 
     public DataValidatorBuilder validateDateAfter(final LocalDate date) {
         if (this.value == null && this.ignoreNullValue) { return this; }
@@ -891,6 +918,23 @@ public class DataValidatorBuilder {
         return this;
     }
     
+    public DataValidatorBuilder isValidEmail(){
+    	 if (this.value != null) {
+    		 try {
+    	            InternetAddress emailAddr = new InternetAddress(this.value.toString());
+    	            emailAddr.validate();
+    	         } catch (AddressException ex) {
+    	        	 final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+    	                        .append(this.parameter).append(".invalid.email");
+    	        	 final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter).append(
+    	                        " must be a valid Email.");
+    	        	 final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+    	                        defaultEnglishMessage.toString(), this.parameter, this.value, 0);
+    	        	 this.dataValidationErrors.add(error);
+    	         }
+    	 }
+    	 return this;
+    }
     
     public void throwExceptionIfValidationWarningsExist(
 			final List<ApiParameterError> dataValidationErrors) {

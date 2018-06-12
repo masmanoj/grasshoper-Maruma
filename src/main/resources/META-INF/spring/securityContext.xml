@@ -13,47 +13,25 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="
    http://www.springframework.org/schema/security 
-   http://www.springframework.org/schema/security/spring-security-3.2.xsd
+   http://www.springframework.org/schema/security/spring-security-4.0.xsd
    http://www.springframework.org/schema/beans 
    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-	<!--  http create-session="stateless" use-expressions="true" pattern="/api/**"
-		entry-point-ref="restAuthenticationEntryPoint"
-		authentication-manager-ref="authenticationManager">
-		<intercept-url pattern="/api/*/authentication" access="permitAll"
-			method="POST" requires-channel="https" />
-		<intercept-url pattern="/api/*/crypt/getpublicrsakey" access="permitAll"
-			method="GET" requires-channel="https" />
-		<intercept-url pattern="/api/**" access="isFullyAuthenticated()"
-			method="GET" requires-channel="https" />
-		<intercept-url pattern="/api/**" access="isFullyAuthenticated()"
-			method="POST" requires-channel="https" />
-		<intercept-url pattern="/api/**" access="isFullyAuthenticated()"
-			method="PUT" requires-channel="https" />
-		<intercept-url pattern="/api/**" access="isFullyAuthenticated()"
-			method="DELETE" requires-channel="https" />
-		<intercept-url pattern="/api/**" access="isFullyAuthenticated()"
-			method="HEAD" requires-channel="https" />
-	<custom-filter before="BASIC_AUTH_FILTER" ref="novobankAuthFilter" />
-	<custom-filter after="SECURITY_CONTEXT_FILTER"
-		ref="basicAuthenticationProcessingFilter" />
-	</http -->
 
-	<!--
-	<beans:bean id="basicAuthenticationEntryPoint"
-		class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
-		<beans:property name="realmName" value="Novobank Core API" />
-	</beans:bean> 
-	-->
-	
 	<http create-session="stateless" use-expressions="true" pattern="/**"
 		entry-point-ref="restAuthenticationEntryPoint"
 		authentication-manager-ref="authenticationManager">
 		<intercept-url pattern="/authentication" access="permitAll"
 			method="POST" requires-channel="https" />
-		<intercept-url pattern="/user" access="permitAll"
+		<intercept-url pattern="/userapi/**" access="permitAll"
 			method="POST"  requires-channel="https"/>
+			<intercept-url pattern="/userapi/activate" access="permitAll"
+			method="GET"  requires-channel="https"/>
 		<intercept-url pattern="/web/**" access="permitAll"
+			method="GET"  />
+		<intercept-url pattern="/stage" access="permitAll"
+			method="GET"  />
+		<intercept-url pattern="/stage/**" access="permitAll"
 			method="GET"  />
 		<intercept-url pattern="/**" access="isFullyAuthenticated()"
 		method="POST"  requires-channel="https"/>
@@ -67,6 +45,7 @@
 		method="HEAD"  requires-channel="https"/>
 		<custom-filter before="BASIC_AUTH_FILTER"
 		ref="GHAuthFilter" />
+		<csrf disabled = "true"/>
 	</http>
 	<beans:bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">

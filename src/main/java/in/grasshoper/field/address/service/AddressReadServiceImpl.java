@@ -30,17 +30,22 @@ public class AddressReadServiceImpl implements AddressReadService {
         this.context = context;
 	}
 	
+	
+	//public api
 	@Override
 	public Collection<AddressData> retriveAllAddresOfLogedInUser(){
 		final User thisUser = this.context.authenticatedUser();
 		final Long userId = thisUser.getId();
-		final AddressRowMapper rowMapper = new AddressRowMapper();
-		final String sql = "select " + rowMapper.schema() + " where a.owner_user_id = ?";
+		final AddressRowMapper rowMapper = new AddressRowMapper(true);
+		final String sql = "select " + rowMapper.schema() + " where a.owner_user_id = ? and is_deleted = false ";
 		return this.jdbcTemplate.query(sql, rowMapper, new Object[] {userId});
 	}
 	
 	private static final class AddressRowMapper implements RowMapper<AddressData> {
-
+		private final boolean hide;
+		public AddressRowMapper(final boolean hide) {
+			this.hide = hide;
+		}
 		public String schema(){
 			final StringBuilder builder = new StringBuilder();
 			
@@ -74,8 +79,14 @@ public class AddressReadServiceImpl implements AddressReadService {
 			return AddressData.createNew(id, name, addressLine1,
 					addressLine2, addressLine3, area, landmark, city, pin, 
 					contactNumber, extraInfo, latitude, longitude, 
-					addressType, ownerUserId);
+					addressType, (this.hide) ? null : ownerUserId);
 		}
 		
+	}
+	@Override
+	public boolean isaddressLinkedwithOrder(final Long addressId){
+		String qry  = "select count(1) from g_order where drop_address = ? or pickup_address = ?";
+		 Integer count = this.jdbcTemplate.queryForObject(qry, Integer.class, new Object[] {addressId, addressId});
+		 return (count!=null && count > 0 );
 	}
 }

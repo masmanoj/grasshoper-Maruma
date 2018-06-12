@@ -10,7 +10,7 @@ public class PlatformUnknownDBException extends RuntimeException {
 
     public PlatformUnknownDBException() {
         this.globalisationMessageCode = "unknown.db.exception";
-        this.defaultUserMessage = "Unknow Data base exception. Please contact system administrator.";
+        this.defaultUserMessage = "Unknown Data base exception. Please contact system administrator.";
         this.parameterName = null;
         this.defaultUserMessageArgs = null;
     }
