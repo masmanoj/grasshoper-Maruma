@@ -46,7 +46,7 @@ angular.module('dashboard', [
   .config(['RestangularProvider', '$httpProvider', '$rootScopeProvider', 
     function(RestangularProvider, $httpProvider, $rootScopeProvider) {
      // RestangularProvider.setBaseUrl('https://tfinder-ghbluefin.rhcloud.com/grasshoper-core/'); 
-	  RestangularProvider.setBaseUrl('https://localhost:8443/grasshoper-core/'); 
+	  RestangularProvider.setBaseUrl('https://localhost:8445/grasshoper-core/'); 
   	  RestangularProvider.setDefaultHeaders({ 'Accept': 'text/html,application/json;q=0.9,*/*;q=0.8'});
   	  delete $httpProvider.defaults.headers.common['X-Requested-With'];
         RestangularProvider.setRestangularFields({

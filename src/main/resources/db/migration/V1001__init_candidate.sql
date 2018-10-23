@@ -1,0 +1,21 @@
+CREATE TABLE `h_candidate` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `contact_num` varchar(20) NOT NULL,
+  `bio` text DEFAULT NULL,
+  `resume_file` varchar(100) NOT NULL,
+  `resume_title` varchar(30) NOT NULL,
+  `experience_yrs` int(2) DEFAULT 0,
+  `experience_mnts` int(2) DEFAULT 0,
+  `address` varchar(500) DEFAULT NULL,
+  `city` varchar(50) NOT NULL,
+  `pin` varchar(6) NOT NULL, 
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_placed` tinyint(1) NOT NULL DEFAULT '1',
+  `score` decimal(4,2) DEFAULT '0.00',
+  `key_skills` varchar(500) DEFAULT NULL,
+  `abstract_json` text,
+  PRIMARY KEY (`id`),
+  KEY `candidate_user_id` (`user_id`),
+  CONSTRAINT `candidate_user_id` FOREIGN KEY (`user_id`) REFERENCES `g_user` (`id`)
+) ;

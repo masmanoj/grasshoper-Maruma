@@ -1,17 +1,18 @@
 <div class="content" ng-controller="HomeController">
 	<div class="page-header">
-	  <h1>Dashboard <small></small></h1>
+		<h1>Dashboard <small></small></h1>
 	</div>
-	<div class="panel panel-default">
+	<!--div class="panel panel-default">
 		<div class="panel-heading">
-	    	<h3 class="panel-title" style="line-height:10px;"><i class="fa fa-flag"></i> {{'heading.panel.main.dashboard'|translate}}
-		    	<div class="pull-right" >
-		    	<!--a class="btn btn-primary" ng-click="pageChanged()">Refresh </a-->
-		    	</div>
-		    	<div style="clear:both"></div>
-	    	</h3>
-	  	</div>
-	  	<div class="panel-body">
+			<h3 class="panel-title" style="line-height:10px;"><i class="fa fa-flag"></i>
+				{{'heading.panel.main.dashboard'|translate}}
+				<div class="pull-right">
+					<!--a class="btn btn-primary" ng-click="pageChanged()">Refresh </a-->
+	<!--/div>
+				<div style="clear:both"></div>
+			</h3>
+		</div>
+		<div class="panel-body">
 	    	<div ng-show= "newOrdersList.length == 0" class = "alert alert-info" >No new Orders</div>
 	    	<div ng-show= "newOrdersList.length > 0">
 		    	<table class="table table-hover">
@@ -45,6 +46,6 @@
 		<div class="col-md-8">
 			<nvd3 options="options" data="data"></nvd3>
 		</div>
-	</div><br><br><br><br><br><br>
+	</div--><br><br><br><br><br><br>
 
 </div>

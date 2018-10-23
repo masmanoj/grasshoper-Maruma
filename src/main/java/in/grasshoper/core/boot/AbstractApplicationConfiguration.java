@@ -36,6 +36,7 @@ public abstract class AbstractApplicationConfiguration {
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
         tomcat.setContextPath(getContextPath());
         tomcat.addAdditionalTomcatConnectors(createSslConnector());
+        tomcat.setPort(8081);
         return tomcat;
     }
 
@@ -73,7 +74,7 @@ public abstract class AbstractApplicationConfiguration {
 	}
 	protected int getHTTPSPort() {
         // TODO This shouldn't be hard-coded here, but configurable
-        return 8443;
+        return 8445;
     }
 
     protected String getKeystorePass() {
